@@ -46,9 +46,9 @@ return [
     |
     */
 
-    'username' => 'email',
+    'username' => 'matricule',
 
-    'email' => 'email',
+    'matricule' => 'matricule',
 
     /*
     |--------------------------------------------------------------------------
@@ -132,7 +132,7 @@ return [
     */
 
     'features' => [
-        Features::registration(),
+        //Features::registration(),
         Features::resetPasswords(),
         //Features::emailVerification(),
         Features::updateProfileInformation(),

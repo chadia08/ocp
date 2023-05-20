@@ -54,16 +54,23 @@
 
         <!-- Name -->
         <div class="col-span-6 sm:col-span-4">
-            <x-label for="name" value="{{ __('Name') }}" />
+            <x-label for="name" value="{{ __('Nom') }}" />
             <x-input id="name" type="text" class="mt-1 block w-full" wire:model.defer="state.name" autocomplete="name" />
             <x-input-error for="name" class="mt-2" />
         </div>
 
-        <!-- Email -->
+        <!-- prenom -->
         <div class="col-span-6 sm:col-span-4">
-            <x-label for="email" value="{{ __('Email') }}" />
-            <x-input id="email" type="email" class="mt-1 block w-full" wire:model.defer="state.email" autocomplete="username" />
-            <x-input-error for="email" class="mt-2" />
+            <x-label for="prenom" value="{{ __('Prenom') }}" />
+            <x-input id="prenom" type="text" class="mt-1 block w-full" wire:model.defer="state.prenom" autocomplete="prenom" />
+            <x-input-error for="prenom" class="mt-2" />
+        </div>
+
+        <!-- Matricule -->
+        <div class="col-span-6 sm:col-span-4">
+            <x-label for="matricule" value="{{ __('Matricule') }}" />
+            <x-input id="matricule" type="text" class="mt-1 block w-full" wire:model.defer="state.matricule" autocomplete="username" />
+            <x-input-error for="matricule" class="mt-2" />
 
             @if (Laravel\Fortify\Features::enabled(Laravel\Fortify\Features::emailVerification()) && ! $this->user->hasVerifiedEmail())
                 <p class="text-sm mt-2">

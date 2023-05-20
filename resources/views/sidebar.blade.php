@@ -4,7 +4,7 @@
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
         <div class="sidebar-brand-icon ">
-            <img src="style/logo2.png" style="height: 60px; width:120; ">
+            <img src="{{ asset('logo.png')}}" style="height: 45px; width:70; ">
         </div>
     </a>
     
@@ -13,14 +13,14 @@
     
     <!-- Nav Item - Dashboard -->
     <li class="nav-item">
-        <a class="nav-link" href="dashboard.php">
+        <a class="nav-link" href="/dashboard">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a>
     </li>
     <li class="nav-item ">
-        <a class="nav-link" href="blank.php">
+        <a class="nav-link" href="/ot">
             <i class="fas fa-fw fa-star"></i>
-            <span>blank</span></a>
+            <span>OT</span></a>
     </li>
     
     <!-- Divider -->
@@ -36,14 +36,13 @@
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
             aria-expanded="true" aria-controls="collapseTwo">
             <i class="fas fa-book"></i>
-            <span>Books</span>
+            <span>Stock</span>
         </a>
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Books:</h6>
-                <a class="collapse-item" href="#">add</a>
-                <a class="collapse-item" href="#">update</a>
-                <a class="collapse-item" href="#">delete</a>
+                <h6 class="collapse-header">Magasin:</h6>
+                <a class="collapse-item" href="/stock/local">local</a>
+                <a class="collapse-item" href="/stock/fictif">fictif(K0431)</a>
             </div>
         </div>
     </li>
@@ -59,7 +58,7 @@
             data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">users</h6>
-                <a class="collapse-item" href="#">show list</a>
+                <a class="collapse-item" href="/users">show list</a>
                 <a class="collapse-item" href="#">Other</a>
             </div>
         </div>
@@ -78,20 +77,20 @@
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
             aria-expanded="true" aria-controls="collapsePages">
             <i class="fas fa-fw fa-folder"></i>
-            <span>Pages</span>
+            <span>Cessions</span>
         </a>
         <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Login Screens:</h6>
-                <a class="collapse-item" href="login.html">Login</a>
-                <a class="collapse-item" href="register.html">Register</a>
-                <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
+                {{-- <h6 class="collapse-header">Login Screens:</h6> --}}
+                <a class="collapse-item" href="/cessions">Cessions Local</a>
+                <a class="collapse-item" href="/cessions">Cession Hors Zone</a>
+                {{-- <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
                 <div class="collapse-divider"></div>
                 <h6 class="collapse-header">Other Pages:</h6>
                 <a class="collapse-item" href="404.html">404 Page</a>
                 <a class="collapse-item" href="blank.html">Blank Page</a>
                  <!-- Nav Item - Tables -->
-                <a class="nav-link" href="tables.html"></a>
+                <a class="nav-link" href="tables.html"></a> --}}
             </div>
         </div>
     </li>

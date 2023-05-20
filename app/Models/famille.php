@@ -1,0 +1,20 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class famille extends Model
+{
+    use HasFactory;
+
+    protected $table="famille";
+
+    protected $fillable = [
+        'code_famille',
+        'nom_famille',
+        'description',
+        'budget',
+    ];
+}
