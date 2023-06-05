@@ -148,7 +148,7 @@
                                             <option value="back log">Back Log</option>
                                             <option value="maintenance">Maintenance</option>
                                         </select> 
-                                        <input name="personne" type="text" class="form-control mb-3" placeholder="Personne">
+                                        <input name="personne" type="text" class="form-control mb-3" placeholder="Demandeur">
                                         <input name="installation" type="text" class="form-control mb-3" placeholder="Installation">
                                         <input name="justification" type="text" class="form-control mb-3" placeholder="Justification">
                                         <select name="statut" class="form-select mb-3 " aria-label="Disabled select example">
@@ -178,7 +178,7 @@
                                             <option value="back log">Back Log</option>
                                             <option value="maintenance">Maintenance</option>
                                         </select> 
-                                        <input name="personne" type="text" class="form-control mb-3" placeholder="Personne">
+                                        <input name="personne" type="text" class="form-control mb-3" placeholder="Demandeur">
                                         <input name="installation" type="text" class="form-control mb-3" placeholder="Installation">
                                         <input name="justification" type="text" class="form-control mb-3" placeholder="Justification">
                                         <select name="statut" class="form-select mb-3 " aria-label="Disabled select example">
@@ -237,7 +237,7 @@
                                 <th>Stock_K0431</th>
                                 <th>allouee</th>
                                 <th>Taux_satisfaction</th>
-                                <th>Distination</th>
+                                <th>Destination</th>
                             </tr>
                             @foreach($pdrs as $pdr)
                             <tr>
@@ -260,22 +260,8 @@
                                 <td>{{$pdr->qte_allouee_local}}</td>
                                 <td>{{$pdr->qte_allouee_fictif}}</td>
                                 <td>{{$pdr->allouer}}</td>
-                                @php
-                                $satisfaction = (100*($pdr->qte_allouee_local+$pdr->qte_allouee_fictif))/$pdr->qte_sortie;
-                                $taux = number_format($satisfaction,2);
-                                @endphp
-                                <td>{{$taux}} %</td>
-                                @php
-                                $destination=null;
-                                    if($taux==100){
-                                        $destination='en attente distribution';
-                                    }elseif (1<=$taux && $taux<=99.99)  {
-                                        $destination='en attente distribution / en attente approvisionnement';
-                                    }else{
-                                        $destination='en attente approvisionnement';
-                                    }
-                                @endphp
-                                <td>{{$destination}}</td>
+                                <td>{{$pdr->taux}} %</td>
+                                <td>{{$pdr->destination}}</td>
                             </tr>
                             @endforeach
                         </table>

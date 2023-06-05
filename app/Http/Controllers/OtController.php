@@ -179,7 +179,10 @@ class OtController extends Controller
         ]);
 
         if($cessionL){
-            $stockLocal = DB::table('stock')->where('code_article', '=', $request->input('article'))->where('nom_magasin','=','fictif')->first();
+            $stockLocal = DB::table('stock')
+                            ->where('code_article', '=', $request->input('article'))
+                            ->where('nom_magasin','=','fictif')->first();
+
             $newQteL = $stockLocal->qte - $request->input('qte');
             DB::table('stock')->where('code_article', '=',$request->input('article'))->where('nom_magasin','=','fictif')->update(['qte' => $newQteL]);
             return redirect('/cessions');
@@ -236,27 +239,31 @@ class OtController extends Controller
         ]);
 
         if($newArticle){
-            $otNewpdr = Ot::create([
-                'code_article' => $request->input('article'),
-                'type'=>'pdr',
-                'qte_sortie' => (int)$request->input('qte'),
-                'personne' => $request->input('personne'),
-                'service'=> $request->input('service'),
-                'num_equipement'=> $request->input('installation'),
-                'justification'=> $request->input('justification'),
-                'statut'=> $request->input('statut'),
-                'qte_allouee_local'=>0,
-                'qte_allouee_fictif'=>0,
-                'allouer'=>'non',
-                'date_sortie'=>$dateFormatted,
-            ]);
+            try{
+                $otNewpdr = Ot::create([
+                    'code_article' => $request->input('article'),
+                    'type'=>'pdr',
+                    'qte_sortie' => (int)$request->input('qte'),
+                    'personne' => $request->input('personne'),
+                    'service'=> $request->input('service'),
+                    'num_equipement'=> $request->input('installation'),
+                    'justification'=> $request->input('justification'),
+                    'statut'=> $request->input('statut'),
+                    'qte_allouee_local'=>0,
+                    'qte_allouee_fictif'=>0,
+                    'allouer'=>'non',
+                    'date_sortie'=>$dateFormatted,
+                    'destination'=>'En attente approvisionnement',
+                    'taux'=>0,
+                ]);
 
-            if($otNewpdr) redirect('/pdr');
-            else redirect('/error');
+                redirect('/pdr');
+             }catch(\Exception $e){ redirect('/error');}
         }
     }
 
     public function ExistArticle(Request $request){
+        $destination='';
     try{ $request->validate([
             'article' => 'required',
             'quantite' => 'required|numeric',
@@ -276,6 +283,21 @@ class OtController extends Controller
         $stockFictif = DB::table('stock')->where('nom_magasin','=','fictif')->where('code_article','=',$request->input('article'))->first();
         $quatiteRestante = $stockLocal->qte -(int)$request->input('quantite');
         $qteAlloueeLocal=$stockLocal->qte-$article->stock_min;
+        $qteAlloueeFictif=(int)$request->input('quantite')-$qteAlloueeLocal;
+
+        $qte_demande = (int)$request->input('quantite');
+        $satisfaction = (100*($qteAlloueeLocal+$qteAlloueeFictif))/$qte_demande;
+        $taux = number_format($satisfaction,2);
+                            
+        
+        if($taux == 100){
+            $destination = 'en attente distribution';
+            }elseif (0<$taux && $taux<=99.99)  {
+                $destination = 'en attente distribution / en attente approvisionnement';
+                }else{
+                    $destination = 'en attente approvisionnement';
+                }
+        
 
         if($quatiteRestante >= $article->stock_min){
             $pdrexist = Ot::create([
@@ -291,6 +313,8 @@ class OtController extends Controller
                 'qte_allouee_local'=>(int)$request->input('quantite'),
                 'qte_allouee_fictif'=> 0,
                 'allouer'=>'non',
+                'destination'=>$destination,
+                'taux'=>$taux,
             ]);
 
         }else{
@@ -307,6 +331,8 @@ class OtController extends Controller
                 'qte_allouee_local'=>$qteAlloueeLocal,
                 'qte_allouee_fictif'=> (int)$request->input('quantite')-$qteAlloueeLocal,
                 'allouer'=>'oui',
+                'destination'=>$destination,
+                'taux'=>$taux,
             ]);
         }
 
@@ -320,6 +346,128 @@ class OtController extends Controller
         if($pdrexist) redirect('/pdr');
         else redirect('error');
     }
+
+    public function otlocal(Request $request){
+        try {
+            $request->validate([
+            'article' => 'required',
+            'ot_local'=>'required',
+            'description_ot_local'=>'required',
+            'magasinier'=>'required',
+            'id'=>'required',
+        ]);
+        DB::table('ot')
+            ->where('id_ot', '=', $request->input('id'))
+            ->update([
+                'ot_local' => $request->input('ot_local'),
+                'description_ot_local' => $request->input('description_ot_local'),
+                'magasinier' => $request->input('magasinier')
+            ]);
+        
+        $stockLocal = DB::table('stock')
+            ->where('nom_magasin','=','local')
+            ->where('code_article','=',$request->input('article'))
+            ->first();
+
+        $newQteL = $stockLocal->qte - $request->input('qte_allouee_local');
+        DB::table('stock')->where('code_article', '=',$request->input('article'))
+                          ->where('nom_magasin','=','local')->update(['qte' => $newQteL]);
+
+        
+        return redirect('/consommation');
+
+            
+
+    }catch(\Exception $v){
+        dd($v->getMessage());
+    }
+    }
+
+    public function otfictif(Request $request){
+        try {
+            $request->validate([
+            'article' => 'required',
+            'ot_local'=>'required',
+            'description_ot_local'=>'required',
+            'magasinier'=>'required',
+            'id'=>'required',
+        ]);
+        DB::table('ot')
+            ->where('id_ot', '=', $request->input('id'))
+            ->update([
+                'ot_fictif' => $request->input('ot_fictif'),
+                'description_ot_fictif' => $request->input('description_ot_fictif'),
+                'magasinier' => $request->input('magasinier')
+            ]);
+        
+        $stockFictif = DB::table('stock')
+            ->where('nom_magasin','=','fictif')
+            ->where('code_article','=',$request->input('article'))
+            ->first();
+            
+        $newQteF = $stockFictif->qte - $request->input('qte_allouee_local');
+        DB::table('stock')->where('code_article', '=',$request->input('article'))
+                          ->where('nom_magasin','=','fictif')->update(['qte' => $newQteF]);
+
+        return redirect('/consommation');
+
+            
+
+    }catch(\Exception $v){
+        dd($v->getMessage());
+    }
+
+    }
+
+    public function otlocalfictif(Request $request){
+        try {
+            $request->validate([
+            
+            'ot_local'=>'required',
+            'article'=>'required',
+            'description_ot_local'=>'required',
+            'ot_fictif'=>'required',
+            'description_ot_fictif'=>'required',
+            'magasinier'=>'required',
+            'id'=>'required',
+        ]);
+        DB::table('ot')
+            ->where('id_ot', '=', $request->input('id'))
+            ->update([
+                'ot_local' => $request->input('ot_local'),
+                'description_ot_local' => $request->input('description_ot_local'),
+                'ot_fictif' => $request->input('ot_fictif'),
+                'description_ot_fictif' => $request->input('description_ot_fictif'),
+                'magasinier' => $request->input('magasinier')
+            ]);
+
+        $stockLocal = DB::table('stock')
+                        ->where('nom_magasin','=','local')
+                        ->where('code_article','=',$request->input('article'))
+                        ->first();
+
+        $stockFictif = DB::table('stock')
+                        ->where('nom_magasin','=','fictif')
+                        ->where('code_article','=',$request->input('article'))
+                        ->first();
+
+        $newQteL = $stockLocal->qte - $request->input('qte_allouee_local');
+        $newQteF = $stockFictif->qte - $request->input('qte_allouee_fictif');
+
+        DB::table('stock')->where('code_article', '=',$request->input('article'))
+                          ->where('nom_magasin','=','local')->update(['qte' => $newQteL]);
+
+        DB::table('stock')->where('code_article', '=',$request->input('article'))
+                          ->where('nom_magasin','=','fictif')->update(['qte' => $newQteF]);                 
+            
+
+        return redirect('/consommation');
+
+        }catch(\Exception $v){
+            dd($v->getMessage());
+        }
+    }
+
     public function selectPdr(){
         $this->pdrs = DB::table('ot')
         ->join('article', 'ot.code_article', '=', 'article.code_article')
@@ -327,5 +475,42 @@ class OtController extends Controller
         ->get();
 
         return view('pdr',['pdrs' => $this->pdrs]);
+    }
+    public function selectCons(){
+        $this->pdrs = DB::table('ot')
+        ->join('article', 'ot.code_article', '=', 'article.code_article')
+        ->where('type','=','pdr')
+        ->where('destination','=','en attente distribution')
+        ->get();
+
+        return view('consommation',['pdrs' => $this->pdrs]);
+    }
+
+    public function SelectAtt(){
+        $this->pdrs = DB::table('ot')
+        ->join('article', 'ot.code_article', '=', 'article.code_article')
+        ->join('famille','article.code_famille','=','famille.code_famille')
+        ->where('type','=','pdr')
+        ->where('destination','=','en attente approvisionnement')
+        ->get();
+
+        return view('attenteApprovisionnement',['pdrs' => $this->pdrs]);
+    }
+
+    public function SubmitDprf(Request $request){
+        $famille  = $request->input('famille');
+
+        $this->pdrs = DB::table('ot')
+        ->join('article', 'ot.code_article', '=', 'article.code_article')
+        ->join('famille','article.code_famille','=','famille.code_famille')
+        ->where('type','=','pdr')
+        ->where('destination','=','en attente approvisionnement')
+        ->where('article.code_famille','=',$famille)
+        ->get();
+        return view('attenteApprovisionnement',['pdrs' => $this->pdrs]);
+    }
+
+    public function PasserDprf(Request $request){
+        echo $request->input('dprf');
     }
 }

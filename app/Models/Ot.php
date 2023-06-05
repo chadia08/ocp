@@ -14,6 +14,10 @@ class Ot extends Model
         'code_article',
         'num_ot',
         'description_ot',
+        'ot_local',
+        'description_ot_local',
+        'ot_fictif',
+        'description_ot_fictif',
         'type',
         'qte_sortie',
         'num_equipement',
@@ -27,5 +31,7 @@ class Ot extends Model
         'qte_allouee_local',
         'qte_allouee_fictif',
         'allouer',
+        'taux',
+        'magasinier',
     ];
 }

@@ -33,7 +33,17 @@ Route::post('/pdr/ArticleExistant','App\Http\Controllers\OtController@ExistArtic
 
 Route::get('/ot','App\Http\Controllers\OtController@selectOt');
 Route::get('/pdr','App\Http\Controllers\OtController@selectPdr');
+Route::get('/AttenteApprovisionnement','App\Http\Controllers\OtController@SelectAtt');
+Route::get('/consommation','App\Http\Controllers\OtController@selectCons');
 Route::get('/cessions','App\Http\Controllers\OtController@selectcessions');
+Route::post('/consommation/otLocal','App\Http\Controllers\OtController@otlocal');
+Route::post('/consommation/otFictif','App\Http\Controllers\OtController@otfictif');
+Route::post('/consommation/OtLocalFictif','App\Http\Controllers\OtController@otlocalfictif');
+Route::post('/submitdprf','App\Http\Controllers\OtController@SubmitDprf');
+Route::post('/passerdprf','App\Http\Controllers\OtController@PasserDprf');
+
+
+
 // Route::get('/excel','App\Http\Controllers\EquipementController@index');
 
 Route::middleware([
