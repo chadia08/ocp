@@ -88,10 +88,13 @@
     height: 80px;
 
 }
+.modal-content{
+            background-color: #2e3235;
+        }
     </style>
 </head>
 <body id="page-top">
-
+    
     <!-- Page Wrapper -->
     <div id="wrapper">
         <!-- Sidebar -->

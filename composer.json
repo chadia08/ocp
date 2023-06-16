@@ -13,6 +13,7 @@
         "laravel/tinker": "^2.8",
         "livewire/livewire": "^2.11",
         "milon/barcode": "^10.0",
+        "phpoffice/phpexcel": "^1.8",
         "phpoffice/phpspreadsheet": "^1.28"
     },
     "require-dev": {
@@ -29,7 +30,11 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "classmap": [
+            "app/Helpers"
+        ]
+        
     },
     "autoload-dev": {
         "psr-4": {

@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>blank</title>
+    <title>dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
     <!-- <link href="style/all.min.css" rel="stylesheet" type="text/css"> -->
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
@@ -27,18 +27,32 @@
         a{
             text-decoration: none;
         }
+        .progress-bar {
+            background-color: green;
+        }
+        a{
+            text-decoration: none;  
+        }
     </style>
 
 </head>
 
 <body id="page-top">
-
+@php
+    session_start();
+@endphp
     <!-- Page Wrapper -->
     <div id="wrapper">
         <!-- Sidebar -->
         @include('sidebar')
         <!-- End of Sidebar -->
-
+        {{-- <h1>
+            
+           @php
+               dd(session()->all());
+           @endphp
+             --}}
+        </h1>
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
 
@@ -51,9 +65,10 @@
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">page heading</h1>
+                        <h1 class="h3 mb-0 text-gray-800">Tableau de Bord</h1>
                     </div>
                    
+
                      <!-- Content Row -->
                      <div class="row">
 
@@ -65,8 +80,8 @@
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                Users</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">200</div>
+                                                Utilisateurs</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{$users->count()}}</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-user fa-2x text-gray-300"></i>
@@ -79,13 +94,14 @@
 
                         <!-- Books -->
                         <div class="col-xl-3 col-md-6 mb-4">
+                            <a href="/ot">
                             <div class="card border-left-primary shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                Books</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">10</div>
+                                                OT</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{$ot->count()}}</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-book fa-2x text-gray-300"></i>
@@ -93,19 +109,21 @@
                                     </div>
                                 </div>
                             </div>
+                        </a>
                         </div>
 
                         <!-- list -->
                         <div class="col-xl-3 col-md-6 mb-4">
+                            <a href="/da">
                             <div class="card border-left-primary shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">List
+                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Demandes d'Achat
                                             </div>
                                             <div class="row no-gutters align-items-center">
                                                 <div class="col-auto">
-                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">80</div>
+                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{$progress->count()}}</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -115,17 +133,19 @@
                                     </div>
                                 </div>
                             </div>
+                        </a>
                         </div>
 
                         <!--  chi le3ba-->
                         <div class="col-xl-3 col-md-6 mb-4">
+                            <a href="/commande">
                             <div class="card border-left-primary shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                chi le3ba</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
+                                                Commandes</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{$cmd->count()}}</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-book fa-2x text-gray-300"></i>
@@ -134,9 +154,28 @@
                                 </div>
                             </div>
                         </div>
+                    </a>
                     </div>
 
                     <!-- Content Row -->
+
+                    <div class="row justify-content-between">
+                        
+                        @foreach($progress as $record)
+                        <div class="col-xl-6 col-md-12 mb-4">
+                            <div class="card shadow h-1000 ">
+                                <div class="card-body">
+                                    <h5 class="card-title text-gray-800"><i class="fas fa-fw fa-folder">&nbsp;</i>Demande d'Achat N° {{$record->num_da}}</h5>
+                                    <h6 class="text-gray-800">Statut: {{$record->statut}}</h6>
+                                        <div class="progress">
+                                            <div class="progress-bar " role="progressbar" style="width: {{ $record->progress }}%">{{$record->progress }}%</div>
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                        @endforeach
+                        
+                    </div>
 
                     <div class="row">
 
@@ -146,7 +185,7 @@
                                 <!-- Card Header  -->
                                 <div
                                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Bar Chart</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">Nombre d'Articles par Stock</h6>
                                 </div>
                                 <!-- Card Body -->
                                 <div class="card-body">
@@ -163,7 +202,7 @@
                                 <!-- Card Header  -->
                                 <div
                                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">doughnut Chart</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">Nombre d'Articles par Famille</h6>
                                     
                                 </div>
                                 <!-- Card Body -->
@@ -195,15 +234,15 @@
     <script>
         const chart =document.getElementById("myChart2");
         const data = {
-                labels: ['Apples', 'Oranges', 'Bananas', 'Grapes'],
+                labels: ['8UH', 'a1b2c3', 'A1B', 'C1D'],
                 datasets: [
                     {
-                    label: 'Fruit',
+                    label: 'Familles',
                     data: [30, 20, 15, 35],
                     backgroundColor: [
                         'green',
                         '#30353a',
-                        'greenyellow',
+                        '#9dd75e',
                         '#faf636'
                     ],
                     borderWidth: 1
@@ -227,20 +266,24 @@
     
         const chart2 =document.getElementById("myChart");
         // Data
+        var stockLocal = {!! $stockLocal !!};
+        var stockFictif = {!! $stockFictif !!};
+        console.log(stockLocal);
+        console.log(stockFictif);
         const data2 = {
-        labels: ['January', 'February', 'March', 'April', 'May'],
+        labels: [stockLocal[0].code_article, stockLocal[1].code_article, stockLocal[2].code_article, stockLocal[3].code_article, stockLocal[4].code_article],
         datasets: [
             {
-                label: 'Sales 1',
-                data: [10, 5, 15, 8, 12],
+                label: 'Stock Local',
+                data: [stockLocal[0].qte, stockLocal[1].qte, stockLocal[2].qte, stockLocal[3].qte, stockLocal[4].qte],
                 backgroundColor: '#9dd75e',
                 borderWidth: 1,
                 barPercentage: 0.4,
                 categoryPercentage: 0.5
                 },
                 {
-                label: 'Sales 2',
-                data: [5, 10, 7, 12, 8],
+                label: 'Stock Fictif',
+                data: [stockFictif[0].qte, stockFictif[1].qte, stockFictif[2].qte, stockFictif[3].qte, stockFictif[4].qte],
                 backgroundColor: 'black',
                 borderWidth: 1,
                 barPercentage: 0.4,
@@ -280,6 +323,8 @@
             data: data2,
             options: options2
         });
+        
+        
         
     </script>
 

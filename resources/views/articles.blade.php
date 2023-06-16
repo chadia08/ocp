@@ -15,7 +15,7 @@
     <link href="{{ asset('css/min2.css') }}" rel="stylesheet">
     <style>
         .fa-eye{
-            color: rgb(142, 251, 47);
+            color: rgb(255, 255, 255);
         }
         .mybutton{
             float: right;
@@ -30,7 +30,7 @@
 </head>
 
 <body id="page-top">
-   
+    
     <!-- Page Wrapper -->
     <div id="wrapper">
         <!-- Sidebar -->
@@ -49,39 +49,49 @@
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Détails</h1>
+                        <h1 class="h3 mb-0 text-gray-800">Articles</h1>
                     </div>
-                    <div class="d-flex">
-                        @foreach ($article as $art)
-                        @if ($art->id==$id)
-                        <div class="card mb-3" style="max-width: 940px; max-height:500px;" >
-                            <div class="row g-0">
-                              <div class="col-md-4">
-                                <img src='{{$art->image}}' class="img-fluid rounded-start" alt="...">
-                              </div>
-                              <div class="col-md-8">
-                                <div class="card-body">
-                                    <h5 class="card-title"><b>Code Article:</b> {{$art->code_article}}</h5>
-                                    <p class="card-text"><b>Stock min:</b> {{$art->stock_min}} <br>
-                                    <b>Categorie:</b> {{$art->categorie}} <br>
-                                    <b>Prix Unitaire:</b> {{$art->pmp}} DH<br>
-                                    <b>Position: </b> {{$art->position}}<br>
-                                    <b>Criticité: </b> {{$art->criticite}}<br>
-                                </p>
-                                    
-                                    
-                                    Elle est produite par un fabricant réputé dans l'industrie des pièces automobiles, et est rigoureusement testée pour garantir sa fiabilité et sa durabilité. Avec cette carte de rechange, vous pouvez restaurer le bon fonctionnement de votre moteur et profiter d'une conduite en toute tranquillité.</p>
-                                    @php
-                                        $barcode = DNS1D::getBarcodeHTML($art->code_article, "C39");
-                                        echo $barcode;
-                                    @endphp
+                    <div class="corp">
+                        <div class="row  row-cols-lg-4  row-cols-md-2 row-cols-sm-1   mt-2">
+                            @foreach($articles as $article)
+                                <div class="col justify-content-space-around">
+                                    <div class="card mt-3">
+                                        <div>
+                                            <img src="{{$article->image}}" class="card-img img-fluid" style="height:200px;" >
+                                        </div>
+                                        <div class="card-body">      
+                                           
+                                            <strong style='font-size: 1rem;'>{{$article->code_article}}</strong><br>
+                                            <p><span  class='text-dark' style='font-size: 1rem;' >categorie: {{$article->categorie}}</span><br>
+                                            <span  class="text-secondary" style='font-size: 1rem;' >famille: {{$article->code_famille}}</span>  </p>   
+                                            
+                                            <a class="btn btn-primary ml-5 " href="/articles/{{$article->id}}" style="float: right;"><i class="fa fa-eye"></i></a>
+                                           						     
+                                        </div>
+                                    </div>
                                 </div>
-                              </div>
-                            </div>
-                          </div>
-
-                        @endif
-                    @endforeach
+                            @endforeach
+                        </div>
+                        {{-- <table class="table">
+                            <tr class="thead">
+                                
+                                <th>code_article</th>
+                                <th>descriptif</th>
+                                <th>code_famille</th>
+                                <th>action</th>
+                            </tr>
+                            @foreach($articles as $article)
+                                <tr>
+                                    <td>{{$article->code_article}}</td>
+                                    <td>{{$article->descriptif}}</td>
+                                    <td>{{$article->code_famille}}</td>
+                                    
+                                    
+                                    <td><a class="btn fa fa-eye" href="/articles/{{$article->id}}"></a></td>
+                                    
+                                </tr>
+                            @endforeach
+                        </table> --}}
                     </div>
                 </div>
             </div>  
@@ -128,4 +138,3 @@
 </body>
 
 </html>
-    

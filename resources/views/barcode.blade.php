@@ -8,6 +8,7 @@
     <title>barcode</title>
 </head>
 <body>
+   
     <table class="table m-1 mb-5" style="width:90%;">
         <tr class="table-secondary">
             <th>code_article</th>

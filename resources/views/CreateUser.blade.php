@@ -21,12 +21,15 @@
             float: right;
             margin-bottom:5px; 
         }
+        .modal-content{
+            background-color: #2e3235;
+        }
     </style>
 
 </head>
 
 <body id="page-top">
-
+   
     <!-- Page Wrapper -->
     <div id="wrapper">
         <!-- Sidebar -->
@@ -49,14 +52,12 @@
                     </div>
                     <div class="corp">
                         <x-guest-layout>
-                            <x-authentication-card>
-                                <x-slot name="logo">
-                                    <x-authentication-card-logo />
-                                </x-slot>
+                           
+                               
                         
                                 <x-validation-errors class="mb-4" />
                         
-                                <form method="POST" action="/users/NewUser">
+                                <form method="POST" action="/users/NewUser" class="w-50 m-5">
                                     @csrf
                         
                                     <div>
@@ -80,17 +81,17 @@
                                     </div>
                         
                                     <div class="mt-4">
-                                        <x-label for="password" value="{{ __('Password') }}" />
+                                        <x-label for="password" value="{{ __('Mot de passe') }}" />
                                         <x-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
                                     </div>
                         
                                     <div class="mt-4">
-                                        <x-label for="password_confirmation" value="{{ __('Confirm Password') }}" />
+                                        <x-label for="password_confirmation" value="{{ __('Confirmer mot de passe') }}" />
                                         <x-input id="password_confirmation" class="block mt-1 w-full" type="password" name="password_confirmation" required autocomplete="new-password" />
                                     </div>
                         
                                     <div class="mt-4">
-                                        <x-label for="role" value="{{ __('Role') }}" />
+                                        <x-label for="role" value="{{ __('Rôle') }}" />
                                         <select class="form-select" aria-label="Default select example" class="form-control"  id="role" class="block mt-1 w-full" type="text" name="role" >
                                             <option value="admin">admin</option>
                                             <option value="niveau2">niveau2</option>
@@ -118,11 +119,11 @@
                                     <div class="flex items-center justify-end mt-4">
                                     
                                         <button class="ml-4 btn btn-primary">
-                                            {{ __('Register') }}
+                                            {{ __('Valider') }}
                                         <button>
                                     </div>
                                 </form>
-                            </x-authentication-card>
+                         
                         </x-guest-layout>
 
                     </div>

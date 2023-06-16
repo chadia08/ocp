@@ -7,12 +7,21 @@ use App\Models\Ot;
 use App\Models\Stock;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Helpers\SequenceGenerator;
 
+
+session_start();
 class OtController extends Controller
 {
     public $ots;
     public $pdrs;
+    public $dprf;
+    public $DA;
+    public $commande;
+    public $progress;
+    
 
+    
     public function insertOt(Request $request){
 
     // Validez les données du formulaire
@@ -109,7 +118,7 @@ class OtController extends Controller
             DB::table('stock')->where('code_article', '=',$request->input('article'))->where('nom_magasin','=','fictif')->update(['qte' => $newQteF]);
             return redirect('/cessions');
         }else{
-            return redirect('/error')->with('error_message', 'Impossible de créer une cession.');
+            return redirect('/error');
         }
     
     }
@@ -146,7 +155,7 @@ class OtController extends Controller
             DB::table('stock')->where('code_article', '=',$request->input('article'))->where('nom_magasin','=','local')->update(['qte' => $newQteL]);
             return redirect('/cessions');
         }else{
-            return redirect('/error')->with('error_message', 'Impossible de créer une cession.');
+            return redirect('/error');
         }
     
     }
@@ -187,7 +196,7 @@ class OtController extends Controller
             DB::table('stock')->where('code_article', '=',$request->input('article'))->where('nom_magasin','=','fictif')->update(['qte' => $newQteL]);
             return redirect('/cessions');
         }else{
-            return redirect('/error')->with('error_message', 'Impossible de créer une cession.');
+            return redirect('/error');
         }
     }
     public function selectcessions(){
@@ -257,8 +266,8 @@ class OtController extends Controller
                     'taux'=>0,
                 ]);
 
-                redirect('/pdr');
-             }catch(\Exception $e){ redirect('/error');}
+                return redirect('/pdr');
+             }catch(\Exception $e){ return redirect('/error');}
         }
     }
 
@@ -343,8 +352,8 @@ class OtController extends Controller
         // Affichage de l'erreur
         dd($e->getMessage());
     }
-        if($pdrexist) redirect('/pdr');
-        else redirect('error');
+        if($pdrexist) return redirect('/pdr');
+        else return redirect('/error');
     }
 
     public function otlocal(Request $request){
@@ -511,6 +520,291 @@ class OtController extends Controller
     }
 
     public function PasserDprf(Request $request){
-        echo $request->input('dprf');
+        if ($request->has('checkboxes')) {
+            $valeursCheckbox = $request->input('checkboxes');
+
+            $date = Carbon::today();
+            $dateFormatted = $date->format('Y-m-d');
+
+            $newCode = SequenceGenerator::generate();
+
+            for($i=0; $i<sizeof($valeursCheckbox); $i++){
+
+                $dprf = DB::table('ot')
+                ->where('id_ot','=',$valeursCheckbox[$i] )
+                ->first();
+
+                $sequence = '';
+                if($request->input('genre')=='electrique'){
+                    $sequence = 'Mé';
+                }elseif($request->input('genre')=='instrument'){
+                    $sequence = 'MR';
+                }
+
+                DB::table('ot')
+                ->insert([
+                    'num_ot' => $sequence.' '.$newCode,
+                    'type'=>'dprf',
+                    'code_article' => $dprf->code_article,
+                    'qte_sortie' => $dprf->qte_sortie,
+                    'date_sortie' => $dateFormatted,
+                    'statut'=>'en attente les accords',
+                ]);  
+            }
+
+            return redirect('/AttenteApprovisionnement?msg=oui');
+
+            
+        } else {
+            return "Aucune case à cocher n'est sélectionnée.";
+        }
     }
+
+    public function selectdprf(Request $request){
+       
+        $this->dprf = DB::table('ot')
+        ->join('article', 'ot.code_article', '=', 'article.code_article')
+        ->join('famille','article.code_famille','=','famille.code_famille')
+        ->where('type','=','dprf')
+        ->get();
+        return view('dprf',['dprf' => $this->dprf]);
+    }
+
+    public function passerda(Request $request){
+        $date = Carbon::today();
+        $dateFormatted = $date->format('Y-m-d');
+        $status='';
+        $challenge = $request->input('challenge');
+        $budget = $request->input('budget');
+        $id = $request->input('id');
+
+    
+        if ($challenge === 'oui' && $budget === 'non') {
+            $status = 'En attente d\'accord budgétaire';
+        } elseif ($challenge === 'non' && $budget === 'oui') {
+            $status = 'En attente d\'accord challenge';
+        } elseif ($challenge === 'oui' && $budget === 'oui') {
+            $status = 'DA';
+        }
+
+        DB::table('ot')
+            ->where('id_ot','=', $id)
+            ->update(['statut' => $status]);
+        
+        
+        if($status === 'DA') {
+            $montant = $request->input('montant');
+            DB::table('ot')->insert([
+                'num_ot'=>$request->input('num_ot'),
+                'code_article'=> $request->input('article'),
+                'type' => 'DA',
+                'statut' => 'En attente DA',
+                'taux' => $montant,
+                'qte_sortie' => $request->input('qte'),
+                'date_sortie' => $dateFormatted,
+                
+            ]);
+        }
+        if($status === 'DA'){
+            return redirect('/da');
+        }else
+        return redirect('/dprf');
 }
+
+    public function modifierqte(Request $request){
+        
+        echo "bonjour";
+            $id = $request->input('id');
+            $qte =(int) $request->input('qte');
+            DB::table('ot')
+            ->where('id_ot', $id)
+            ->update(['qte_sortie' => $qte]);
+            return redirect('/AttenteApprovisionnement?qte=oui');
+
+    }
+
+    public function selectDa(){
+        $this->DA = DB::table('ot')
+        ->join('article', 'ot.code_article', '=', 'article.code_article')
+        ->join('famille','article.code_famille','=','famille.code_famille')
+        ->where('type','=','DA')
+        ->get();
+        return view('da',['DA' => $this->DA]);
+    }
+
+
+    //---------------avancer da----------------//
+    public function avancerDA(Request $request)
+    {
+        $id = (int) $request->input('id');
+
+        // Récupérez l'enregistrement correspondant à l'ID dans la table "ot"
+        $ot = DB::table('ot')->where('id_ot', $id)->first();
+        
+        switch ($ot->statut) {
+            case "En attente DA":
+                $newPhase = "AMI";
+                $progress = 10;
+                break;
+            case "AMI":
+                $newPhase = "CGA";
+                $progress = 25;
+                break;
+            case "CGA":
+                $newPhase = "En attente AO";
+                $progress = 40;
+                break;
+            case "En attente AO":
+                $newPhase = "Avis technique";
+                $progress = 55;
+                break;
+            case "Avis technique":
+                $newPhase = "En attente AC";
+                $progress = 70;
+                break;
+            case "En attente AC":
+                $newPhase = "CAD";
+                $progress = 85;
+                break;
+            case "CAD":
+                $newPhase = "CMD";
+                $progress = 100;
+                break;
+            default:
+                $newPhase = ""; 
+                break;
+        }
+        
+        $date = Carbon::today();
+        $dateFormatted = $date->format('Y-m-d');
+
+        if(DB::table('ot')->where('id_ot', $id)->update(['statut' => $newPhase,'progress'=>$progress]) == true){
+
+            if($newPhase == 'AMI'){
+                DB::table('ot')->where('id_ot', $id)->update(['statut' => $newPhase,'num_da' => $request->input('num_da'),'montant_challenge'=>$request->input('montant_challenge')]);
+            }
+            elseif ($newPhase == 'Avis technique'){
+                DB::table('ot')->where('id_ot', $id)->update(['statut' => $newPhase,
+                                                                'num_ao' => $request->input('num_ao'),
+                                                                'date_ao' => $dateFormatted]);
+            }  
+
+            elseif ($newPhase == 'En attente AC'){
+                DB::table('ot')->where('id_ot', $id)->update(['statut' => $newPhase,
+                                                                'num_at' => $request->input('num_at'),
+                                                                'date_at' => $dateFormatted]);
+            } 
+                
+            elseif ($newPhase == 'CAD'){
+                DB::table('ot')->where('id_ot', $id)->update(['statut' => $newPhase,
+                                                                'num_ac' => $request->input('num_ac'),
+                                                                'date_ac' => $dateFormatted]);
+            }
+            return redirect('/da?msg=phase_modifiée');
+    }else return redirect('/da?error=phase_non_modifiée');
+    }
+
+    public function selectCmd(){
+        $this->commande = DB::table('ot')
+        ->join('article', 'ot.code_article', '=', 'article.code_article')
+        ->join('famille','article.code_famille','=','famille.code_famille')
+        ->where('statut','=','CMD')
+        ->get();
+        return view('commande',['commande' => $this->commande]);
+    }
+
+    public function avancerCmd(Request $request){
+
+        $date = Carbon::today();
+        $dateFormatted = $date->format('Y-m-d'); 
+
+        $id = $request->input('id');
+        $commande = DB::table('ot')
+                ->where('id_ot','=',$id)
+                ->first();
+        
+        $qte_livree = $commande->qte_livree + $request->input('qte_livree');
+        $qte_initiale = $commande->qte_sortie ;
+        $qte = $qte_initiale - $qte_livree;
+
+        if($qte > 0) $stade = 'livrée partiellement';
+        elseif($qte == 0) $stade = 'livrée totalement';
+        else $stade = 'Non livrée';
+
+        if($request->has('fournisseur')){
+            DB::table('ot')->where('id_ot', $id)->update(['stade' => $stade,
+                                                                'qte_livree' => $qte_livree,
+                                                                'fournisseur' => $request->input('fournisseur')]);
+        }else{
+            DB::table('ot')->where('id_ot', $id)->update(['stade' => $stade,
+                                                                'qte_livree' => $qte_livree]);
+        }
+
+        $commande = DB::table('ot')
+                ->where('id_ot','=',$id)
+                ->first();
+
+        if($commande->stade == 'livrée totalement'){
+            $stock = DB::table('stock')
+                ->where('nom_magasin','=','fictif')
+                ->where('code_article','=',$commande->code_article)
+                ->first();
+
+            if($stock){
+                $qte_stock = $stock->qte + $commande->qte_livree;
+                DB::table('stock')
+                ->where('nom_magasin','=','fictif')
+                ->where('code_article','=',$commande->code_article)
+                ->update(['qte' => $qte_stock]);
+            }else{
+                DB::table('stock')
+                ->insert([
+                    'code_article' => $commande->code_article,
+                    'nom_magasin'=>'fictif',
+                    'qte' =>$commande->qte_livree,
+                    'date_entree' => $dateFormatted,
+                    
+                ]); 
+            }
+            return redirect('/commande?cmd=livree_totalement');
+        }elseif($commande->stade = 'livrée partiellement') return redirect('/commande?cmd=livree_partiellement');
+        else return redirect('/commande');
+        
+    }
+
+    public function selectbar(){
+        
+    $this->progress = DB::table('ot')
+    ->join('article', 'ot.code_article', '=', 'article.code_article')
+    ->join('famille','article.code_famille','=','famille.code_famille')
+    ->where('type', '=', 'DA')
+    ->get();
+    
+    $users = DB::table('users')->get();
+    $ot = DB::table('ot')->get();
+    $cmd = DB::table('ot')->where('statut','=','CMD')->get();
+    
+    $local= DB::table('stock')
+    ->where('nom_magasin', '=', 'local')
+    ->take(5)
+    ->get();
+
+    $fictif= DB::table('stock')
+    ->where('nom_magasin', '=', 'fictif')
+    ->take(5)
+    ->get();
+    
+    $stockLocal = json_encode($local);
+    $stockFictif = json_encode($fictif);
+
+        return view('dashboard',['progress' => $this->progress,'users'=>$users,'ot'=>$ot,'cmd'=>$cmd,'stockLocal'=>$stockLocal,'stockFictif'=>$stockFictif]);
+    }
+
+    public function returnHome(){
+        return view('home');
+    }
+
+}
+
+
+

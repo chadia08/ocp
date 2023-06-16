@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
-// use Illuminate\Support\Facades\Gate;
+use Illuminate\Auth\Events\Authenticated;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -21,6 +23,17 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        $this->app['events']->listen(Authenticated::class, function (Authenticated $event) {
+            $user = $event->user;
+            Session::put('user_id', $user->id);
+            Session::put('user_name', $user->name);
+            Session::put('matricule', $user->matricule);
+            Session::put('prenom', $user->prenom);
+            Session::put('role', $user->role);
+            Session::put('password', $user->password);
+            
+            
+            // Ajoutez d'autres informations de connexion que vous souhaitez stocker dans la session
+        });
     }
 }

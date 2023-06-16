@@ -14,6 +14,9 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
     <link href="{{ asset('css/min2.css') }}" rel="stylesheet">
     <style>
+         .modal-content{
+            background-color: #2e3235;
+        }
         .fa-trash{
             color: rgb(251, 47, 47);
         }
@@ -30,7 +33,7 @@
 </head>
 
 <body id="page-top" >
-
+   
     <!-- Page Wrapper -->
     <div id="wrapper" >
         <!-- Sidebar -->
@@ -51,9 +54,11 @@
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">OT</h1>
                     </div>
-                
+                    
+
                     <div class="corp" style="overflow-x:scroll;">
-                                 
+                        <a href="{{ route('telecharger.excel') }}" class="btn btn-primary m-3 p-2" style="float: right;">Télécharger Excel</a>
+   
                         <table class="table">
                             <thead>
                                 <tr class="thead">
@@ -165,6 +170,8 @@
                             @endforeach
                         </table> --}}
                     </div>
+                   
+
                 </div>
             </div>  
 

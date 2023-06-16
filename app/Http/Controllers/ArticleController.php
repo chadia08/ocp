@@ -15,9 +15,11 @@ use Jetstream\Actions\DeleteTeam;
 class ArticleController extends Controller
 {
     public $article;
+    public $articles;
     public $results;
     public $results2;
     public $equipement;
+    public $notifications ;
     
     
     public function __construct(){
@@ -26,6 +28,11 @@ class ArticleController extends Controller
         
     }
 
+    public function selectArticles(){
+        $this->articles = DB::table('article')->get();
+        return view('articles',['articles' => $this->articles]);
+                     
+    }
     public function stock(){
         return view('stock',['article' => $this->article]);
     }
@@ -64,6 +71,24 @@ class ArticleController extends Controller
         return view('details',['article'=>$this->article,'id'=>$id]);
     }
 
+    public function selectNotifs(){
+        $stockMin = DB::table('article')
+        ->join('stock', 'stock.code_article', '=', 'article.code_article')
+        ->where('stock.nom_magasin', '=', 'local')
+        ->get();
+        
+        $i = 0;
+       foreach($stockMin as $notifs){
+        if($notifs->qte <= $notifs->stock_min){
+            $notifications[$i] = $notifs;
+            $i++;
+        }
+       }
+    
+       $count = sizeof($notifications);
+        return view('notifications',['notifications'=>$notifications]);
+
+    }
 
 
     

@@ -26,12 +26,18 @@
             background-color: #2e3235;
             color: rgb(214, 206, 206);
         }
+        .disable {
+           border-color: white;
+        }
+        .modal-content{
+            background-color: #2e3235;
+        }
     </style>
 
 </head>
 
 <body id="page-top">
-
+    
     <!-- Page Wrapper -->
     <div id="wrapper">
         <!-- Sidebar -->
@@ -59,13 +65,23 @@
                             <select name="famille"  class="form-select mb-3 w-25 btn btn-primary" aria-label="Disabled select example">
                                 <option selected disabled hidden>Famille</option>
                                     <option value="8UH">8UH</option>
-                                    <option value="moyenne">Moyenne</option>
-                                    <option value="critique">Critique</option>
+                                    <option value="moyenne">a1b2c3</option>
+                                    
                             </select>
                             <button type="submit" class="btn btn-primary mb-3"><i class="fa fa-search"></i></button>
                         </form>
                         <div style="overflow-x:scroll;">
-                            <table class="table m-1 mb-5" style="width:100%;">
+                            <div class="d-flex" style="position: fixed; right: 0; margin-bottom: 100px; z-index: 9999;">
+                                <select name="genre"  class="form-select m-2  btn btn-secondary" style="width:160px;" aria-label="Disabled select example">
+                                    <option selected disabled hidden>Genre</option>
+                                        <option value="electrique">éléctrique</option>
+                                        <option value="instrument">instrument</option>
+                                </select>
+                                <button type="submit" class="btn btn-primary m-2" style="width:160px;">Passer DPRF</button>
+                            </div>
+                            <div>
+                                
+                            <table class="table m-1 mb-5 mt-5" style="width:100%;">
                                 <tr class="thead">
                                     <th>id</th>
                                     <th>code_famille</th>
@@ -100,42 +116,59 @@
                                     <td>{{$pdr->date_sortie}}</td>
                                     <td>{{$pdr->num_equipement}}</td>
                                     <td>{{$pdr->justification}}</td>
+                                    
+                                    <!--modification de la quantité-->
+                                        <div class="modal fade" id="{{$pdr->id_ot}}" tabindex="-1" aria-labelledby="exampleModalLabeln" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="exampleModalLabeln">Modifier la Quantité</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form action="/modifierQte" method="post">
+                                                        @csrf
+                                                        Code Article:
+                                                        <input name="article" type="text" class="form-control m-2" value="{{$pdr->code_article}}" readonly>
+                                                        <input name="qte" type="text" class="form-control m-2" placeholder="Quantité">
+                                                        <input name='id' type="hidden" value="{{$pdr->id_ot}}">
+                                                        <button type="button" class="btn btn-secondary w-25 m-4" data-bs-dismiss="modal">Fermer</button>
+                                                        <input type="submit" class="btn btn-primary w-25 m-4" value="Enregistrer">
+                                                    </form>
+                                                </div>
+                                            </div>
+                                            </div>
+                                        </div>
+                                    
+                                    <!--fin modification de la quantité-->
+
+                                    
                                     <form action="/passerdprf" method="POST">
                                         @csrf
                                     <td class="d-flex">
                                     
-                                        <a href="" class="btn btn-secondary m-2" style="width:160px;"> demander cession </a>
-                                        <a href="" class="btn btn-danger  m-2" style="width:160px;"> modifier la qte </a>
+                                        <button class="btn btn-secondary m-2" style="width:160px;" data-bs-toggle="modal" data-bs-target="#{{$pdr->id_ot.$pdr->code_article}}"> demander cession </a>
+                                        <button type ="button" class="btn   m-2" style="width:160px; background-color:#faf636;" data-bs-toggle="modal" data-bs-target="#{{$pdr->id_ot}}">
+                                        modifier la qte
+                                        </button>
                                     </td>
                                     <td>
-                                        <input type="checkbox" name="dprf"  valeur="{{$pdr->code_article}}" class="ml-4">
+                                        <input type="checkbox" name="checkboxes[]"  value="{{$pdr->id_ot}}" class="ml-4">
                                     </td>
+
+                                    
                                 </tr>
                                 @endforeach
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td>
-                                        <button type="submit" class="btn btn-primary m-2" style="width:160px;">Passer DPRF</button>
-                                    </td>
-                                </tr>
+                            </div>
+                                    
+                                
                             </table>
                             
                         </form>
+                   
                         </div>
+                        
+                        
 
             @include('footer')
         </div>
@@ -155,10 +188,19 @@
 	    if (urlParams.has('msg')) {
 				 Swal.fire({
 	  		icon: 'success',
-	  		title: 'User has been deleted successfully',
+	  		title: 'DPRF est passé avec ',
 	  		text: urlParams.get('msg')
 	});
 }
+
+if (urlParams.has('qte')) {
+				 Swal.fire({
+	  		icon: 'success',
+	  		title: 'Quantité modifiée avec succès ',
+	  		text: urlParams.get('msg')
+	});
+}
+
     if (urlParams.has('error')) {
 				 Swal.fire({
 	  		icon: 'error',

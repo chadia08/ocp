@@ -26,12 +26,15 @@
             background-color: #2e3235;
             color: rgb(214, 206, 206);
         }
+        .modal-content{
+            background-color: #2e3235;
+        }
     </style>
 
 </head>
 
 <body id="page-top">
-
+    
     <!-- Page Wrapper -->
     <div id="wrapper">
         <!-- Sidebar -->
@@ -110,11 +113,13 @@
                                     @endphp
                                     <td>{{$bool}}</td>
                                     <td>Local:{{$pdr->ot_local}}<br> Fictif:{{$pdr->ot_fictif}}</td>
+                                    @if(session('role')==='admin' || session('role')==='niveau2')
                                     <td>
                                         @php
                                             $a=1; $b=2; $c=3;
                                             $id = $pdr->id_ot;
                                         @endphp
+                                        
                                             @if ( $pdr->qte_allouee_local != 0 && $pdr->qte_allouee_fictif == 0 )
                                                 <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#{{$pdr->id_ot}}">
                                                     <i class=" fa fa-arrow-circle-down"></i>
@@ -131,7 +136,7 @@
                                                 </button>
                                             @endif
                                     </td>
-
+                                   
 
                                     <!----- Modal ot local ----->
                                     <div class="modal fade" id="{{$pdr->id_ot}}" tabindex="-1" aria-labelledby="exampleModalLabeln" aria-hidden="true">
@@ -218,6 +223,7 @@
                                         </div>
                                         </div>
                                     </div>
+                                    @endif
                                     
                                 </tr>
                                 @endforeach

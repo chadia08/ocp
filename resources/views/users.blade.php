@@ -30,7 +30,7 @@
 </head>
 
 <body id="page-top">
-
+   
     <!-- Page Wrapper -->
     <div id="wrapper">
         <!-- Sidebar -->
@@ -54,12 +54,14 @@
                     <div class="corp">
                         <!-- Button trigger modal -->
                         {{-- data-bs-toggle="modal" data-bs-target="#exampleModal" --}}
+                        @if(session('role')==='admin')
                         <a type="button" class="btn btn-primary mybutton" href="/users/CreateUser">
                             <i class="fa fa-user-plus"></i> &nbsp;Ajouter Utilisateur
-                        </a>                          
+                        </a>   
+                        @endif                       
                         <table class="table">
                             <tr class="thead">
-                                <th>id</th>
+                               
                                 <th>Matricule</th>
                                 <th>nom</th>
                                 <th>prenom</th>
@@ -68,7 +70,7 @@
                             </tr>
                             @foreach($user as $use)
                                 <tr>
-                                    <td>{{$use->id}}</td>
+                               
                                     <td>{{$use->matricule}}</td>
                                     <td>{{$use->name}}</td>
                                     <td>{{$use->prenom}}</td>

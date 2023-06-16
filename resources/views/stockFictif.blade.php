@@ -30,10 +30,13 @@
             background-color: #2e3235;
             color: rgb(214, 206, 206);
         }
+        .modal-content{
+            background-color: #2e3235;
+        }
     </style>
 </head>
 <body id="page-top">
-
+   
     <!-- Page Wrapper -->
     <div id="wrapper">
         <!-- Sidebar -->
@@ -100,19 +103,25 @@
                                 <td>{{$result->date_entree}}</td>
                         
                                     <!-- Button trigger modal -->   
+                                    @if(session('role')==='admin' || session('role')==='niveau2')
                                     <td class="d-flex"><button title="ajouter un article au magasin local par ot" type="button" class="btn btn-primary m-1" data-bs-toggle="modal" data-bs-target="#{{$result->code_article}}">
                                         <i class=" fa fa-arrow-circle-down"></i>
                                     </button>
                                     </td>
+                                    @endif
                                     
+                                    @if(session('role')==='admin' || session('role')==='niveau2')
                                     <td><button title="ajouter un article au cession hore zone par ot" type="button" class="btn btn-primary m-1" data-bs-toggle="modal" data-bs-target="#{{$result->descriptif}}">
                                         <i class=" fa fa-arrow-circle-up"></i>
                                     </button></td>
+                                    @endif
 
+                                    @if(session('role')==='admin' || session('role')==='niveau2')
                                     <td><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#{{$result->code_article.$result->descriptif}}">
                                         <i class=" fa fa-arrow-circle-up"></i>
                                     </button>
                                     </td>
+                                    @endif
 
                                     <!------------ Modal local ------------->
                                     <div class="modal fade" id="{{$result->code_article}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -220,7 +229,7 @@
                                                 </select>        
                                             </div>
                                             <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
                                             <input type="submit" class="btn btn-primary" vlaue="Save changes">
                                             </div>
                                         </form>

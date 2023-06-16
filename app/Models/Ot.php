@@ -33,5 +33,13 @@ class Ot extends Model
         'allouer',
         'taux',
         'magasinier',
+        'num_da',
+        'num_ao',
+        'date_ao',
+        'num_at',
+        'date_at',
+        'num_ac',
+        'date_ac',
+        "montant_challenge",
     ];
 }

@@ -40,7 +40,7 @@
     </style>
 </head>
 <body id="page-top">
-
+   
     <!-- Page Wrapper -->
     <div id="wrapper">
         <!-- Sidebar -->
@@ -112,10 +112,12 @@
                                 <td>{{$result->date_entree}}</td>
                             
                                     <!-- Button trigger modal -->   
+                                    @if(session('role')==='admin' || session('role')==='niveau2')
                                     <td><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#{{$result->code_article}}">
                                         <i class=" fa fa-arrow-circle-up"></i>
                                     </button>
                                     </td>
+                                    @endif
 
                                     <!-- Modal -->
                                     <div class="modal fade" id="{{$result->code_article}}" tabindex="-1" aria-labelledby="exampleModalLabeln" aria-hidden="true">
@@ -136,17 +138,17 @@
                                                 <input  name="demandeur" type="text" class="form-control  m-2" placeholder="Demandeur">
                                                 <input  name="service" type="text" class="form-control  m-2" placeholder="Service">
 
-                                                <select name="DestinationZoneLocal" class="form-select w-5 m-2 " aria-label="Disabled select example">
-                                                    <option selected>Destination</option>
+                                                    <select name="DestinationZoneLocal" class="form-select w-5 m-2 " aria-label="Disabled select example">
+                                                        <option selected>Destination</option>
                                                         <option value="beni amir">Beni Amir</option>
                                                         <option value="beni idir">Beni Idir</option>
-                                                </select>        
-                                            </div>
-                                            <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                            <input type="submit" class="btn btn-primary" vlaue="Save changes">
-                                            </div>
-                                        </form>
+                                                    </select>        
+                                                </div>  
+                                                <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <input type="submit" class="btn btn-primary" vlaue="Save changes">
+                                                </div>
+                                            </form>
                                         </div>
                                         </div>
                                     </div>

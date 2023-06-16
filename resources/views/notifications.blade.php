@@ -5,6 +5,7 @@
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -14,8 +15,8 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
     <link href="{{ asset('css/min2.css') }}" rel="stylesheet">
     <style>
-        .fa-eye{
-            color: rgb(142, 251, 47);
+        .fa-trash{
+            color: rgb(251, 47, 47);
         }
         .mybutton{
             float: right;
@@ -25,12 +26,18 @@
             background-color: #2e3235;
             color: rgb(214, 206, 206);
         }
+        .disable {
+           border-color: white;
+        }
+        .modal-content{
+            background-color: #2e3235;
+        }
     </style>
 
 </head>
 
 <body id="page-top">
-   
+    
     <!-- Page Wrapper -->
     <div id="wrapper">
         <!-- Sidebar -->
@@ -49,44 +56,37 @@
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Détails</h1>
+                        <h1 class="h3 mb-0 text-gray-800">Notifications</h1>
                     </div>
-                    <div class="d-flex">
-                        @foreach ($article as $art)
-                        @if ($art->id==$id)
-                        <div class="card mb-3" style="max-width: 940px; max-height:500px;" >
-                            <div class="row g-0">
-                              <div class="col-md-4">
-                                <img src='{{$art->image}}' class="img-fluid rounded-start" alt="...">
-                              </div>
-                              <div class="col-md-8">
-                                <div class="card-body">
-                                    <h5 class="card-title"><b>Code Article:</b> {{$art->code_article}}</h5>
-                                    <p class="card-text"><b>Stock min:</b> {{$art->stock_min}} <br>
-                                    <b>Categorie:</b> {{$art->categorie}} <br>
-                                    <b>Prix Unitaire:</b> {{$art->pmp}} DH<br>
-                                    <b>Position: </b> {{$art->position}}<br>
-                                    <b>Criticité: </b> {{$art->criticite}}<br>
-                                </p>
-                                    
-                                    
-                                    Elle est produite par un fabricant réputé dans l'industrie des pièces automobiles, et est rigoureusement testée pour garantir sa fiabilité et sa durabilité. Avec cette carte de rechange, vous pouvez restaurer le bon fonctionnement de votre moteur et profiter d'une conduite en toute tranquillité.</p>
-                                    @php
-                                        $barcode = DNS1D::getBarcodeHTML($art->code_article, "C39");
-                                        echo $barcode;
-                                    @endphp
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-
+                    <div class="corp">                     
+                        @if($notifications == null)
+                            <h3><center>il n'y a aucune notifications pour le moment !</center></h3>
                         @endif
-                    @endforeach
-                    </div>
-                </div>
-            </div>  
+                        @foreach($notifications as $notif)
+                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                <div class="mr-3">
+                                    <div class="icon-circle bg-primary">
+                                        <i class="fas fa-file-alt text-white"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="small text-gray-500">December 12, 2023</div>
+                                    <span class="font-weight-bold">l'Article {{$notif->code_article}} atteint son stock min</span>
+                                </div>
+                            </a>
+                        @endforeach
 
-          
+                                    
+                                
+                    </div>
+                                    
+                                
+                            
+                   
+            </div>
+                        
+                        
+
             @include('footer')
         </div>
         <!-- End of Content Wrapper -->
@@ -105,14 +105,23 @@
 	    if (urlParams.has('msg')) {
 				 Swal.fire({
 	  		icon: 'success',
-	  		title: 'articler has been deleted successfully',
+	  		title: 'DPRF est passé avec ',
 	  		text: urlParams.get('msg')
 	});
 }
+
+if (urlParams.has('qte')) {
+				 Swal.fire({
+	  		icon: 'success',
+	  		title: 'Quantité modifiée avec succès ',
+	  		text: urlParams.get('msg')
+	});
+}
+
     if (urlParams.has('error')) {
 				 Swal.fire({
 	  		icon: 'error',
-	  		title: 'articler has not been deleted ! try again',
+	  		title: 'User has not been deleted ! try again',
 	  		text: urlParams.get('error')
 	});
 }
@@ -125,7 +134,6 @@
     navAccueil.classList.add('active');
 }
   </script>
-</body>
 
+</body>
 </html>
-    
