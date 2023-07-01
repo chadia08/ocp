@@ -1,2 +1,2 @@
-**Instructions de déploiement - Système MEA STOCK**
+# Instructions de déploiement - Système MEA STOCK
 hsdjd
