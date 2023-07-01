@@ -7,7 +7,7 @@ Avant de commencer le déploiement du projet, assurez-vous de respecter les pré
 #### Laragon
 Téléchargez Laragon depuis le site officiel : 
 
-        [Lien de téléchargement de Laragon https://laragon.org/download/]
+        https://laragon.org/download/
 
 Sélectionnez la version correspondant à votre système d'exploitation (Windows).
 Suivez les instructions d'installation fournies sur le site pour installer Laragon sur votre machine.
@@ -53,3 +53,10 @@ Assurez-vous que Composer est installé sur le serveur.
 
 #### 4.Exécution des migrations
 Dans le terminal, exécutez la commande **php artisan migrate** pour exécuter les migrations et créer les tables nécessaires dans la base de données.
+
+#### 5.Configuration du stockage des fichiers
+xécutez la commande **php artisan storage:link** pour lier le répertoire de stockage.
+
+#### 6.Accès à l'application
+Ouvrez un navigateur web et accédez à l'URL de votre application pour vérifier si elle est accessible.
+**page d'acceuil: http://127.0.0.1:8000/home**.
