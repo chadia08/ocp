@@ -38,3 +38,11 @@ GitHub Download ZIP
 
 3.Une fois le téléchargement terminé, extrayez le contenu de l'archive ZIP dans le répertoire de votre choix. Vous obtiendrez un répertoire contenant tous les fichiers du projet.
 Maintenant que vous avez téléchargé le code source du projet, vous pouvez passer à l'étape suivante pour configurer l'environnement de déploiement.
+
+#### 2.Création manuelle de la base de données
+utilisez PhpMyAdmin, suivez les étapes suivantes :
+Ouvrez PhpMyAdmin dans votre navigateur en accédant à l'URL appropriée (ex : http://localhost/phpmyadmin).
+Connectez-vous à votre serveur MySQL à l'aide des identifiants appropriés.
+Cliquez sur l'onglet "Bases de données" et entrez le nom de la base de données dans le champ de création.
+Cliquez sur le bouton "Créer" pour créer la base de données.
+NB: Utilisez le nom de base de données spécifié dans le fichier .env (dans l'exemple donné, le nom de base de données est "###ocp").
