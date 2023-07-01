@@ -46,3 +46,7 @@ Connectez-vous à votre serveur MySQL à l'aide des identifiants appropriés.
 Cliquez sur l'onglet "Bases de données" et entrez le nom de la base de données dans le champ de création.
 Cliquez sur le bouton "Créer" pour créer la base de données.
 NB: Utilisez le nom de base de données spécifié dans le fichier .env (dans l'exemple donné, le nom de base de données est **ocp**).
+
+#### 3.Installation des dépendances
+Assurez-vous que Composer est installé sur le serveur.
+À l'aide d'un terminal, accédez au répertoire du projet et exécutez la commande **composer install** pour installer les dépendances.
