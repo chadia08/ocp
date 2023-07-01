@@ -3,3 +3,4 @@ Ces instructions détaillent les étapes nécessaires pour déployer le projet d
 
 ## Prérequis
 Avant de commencer le déploiement du projet, assurez-vous de respecter les prérequis suivants:
+### Laragon
