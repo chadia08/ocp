@@ -50,3 +50,6 @@ NB: Utilisez le nom de base de données spécifié dans le fichier .env (dans l'
 #### 3.Installation des dépendances
 Assurez-vous que Composer est installé sur le serveur.
 À l'aide d'un terminal, accédez au répertoire du projet et exécutez la commande **composer install** pour installer les dépendances.
+
+#### 4.Exécution des migrations
+Dans le terminal, exécutez la commande **php artisan migrate** pour exécuter les migrations et créer les tables nécessaires dans la base de données.
