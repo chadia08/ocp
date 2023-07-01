@@ -5,7 +5,9 @@ Ces instructions détaillent les étapes nécessaires pour déployer le projet d
 Avant de commencer le déploiement du projet, assurez-vous de respecter les prérequis suivants:
 
 #### Laragon
-Téléchargez Laragon depuis le site officiel : [Lien de téléchargement de Laragon https://laragon.org/download/]
+Téléchargez Laragon depuis le site officiel : 
+        [Lien de téléchargement de Laragon https://laragon.org/download/]
+
 Sélectionnez la version correspondant à votre système d'exploitation (Windows).
 Suivez les instructions d'installation fournies sur le site pour installer Laragon sur votre machine.
 
