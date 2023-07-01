@@ -6,6 +6,7 @@ Avant de commencer le déploiement du projet, assurez-vous de respecter les pré
 
 #### Laragon
 Téléchargez Laragon depuis le site officiel : 
+
         [Lien de téléchargement de Laragon https://laragon.org/download/]
 
 Sélectionnez la version correspondant à votre système d'exploitation (Windows).
