@@ -28,7 +28,7 @@ Une fois que vous avez installé Laragon et vérifié que les prérequis sont sa
 ## Étapes de déploiement
 
 #### 1.Téléchargement du code source
-Pour commencer, vous devez télécharger le code source du projet depuis le référentiel GitHub fourni. Suivez ces étapes 
+Pour commencer, vous devez télécharger le code source du projet depuis le référentiel GitHub fourni. Suivez ces étapes  :
 i. Ouvrez un navigateur web et accédez au référentiel GitHub du projet :
 
         https://github.com/chadia08/ocp.git.
