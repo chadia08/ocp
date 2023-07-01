@@ -45,4 +45,4 @@ Ouvrez PhpMyAdmin dans votre navigateur en accédant à l'URL appropriée (ex : 
 Connectez-vous à votre serveur MySQL à l'aide des identifiants appropriés.
 Cliquez sur l'onglet "Bases de données" et entrez le nom de la base de données dans le champ de création.
 Cliquez sur le bouton "Créer" pour créer la base de données.
-NB: Utilisez le nom de base de données spécifié dans le fichier .env (dans l'exemple donné, le nom de base de données est ### ocp).
+NB: Utilisez le nom de base de données spécifié dans le fichier .env (dans l'exemple donné, le nom de base de données est **ocp**).
